@@ -39,6 +39,13 @@ The system continues operating safely even during failures.
 - Firebase Realtime Database sync
 - Live web dashboard (Digital Twin)
 - Multi‑user real‑time access
+  
+---
+
+## Wokwi simulation
+
+
+[Wokwi Simulation](https://wokwi.com/projects/453870955625455617)
 
 ---
 
@@ -55,8 +62,4 @@ flowchart LR
 
     A -->|Fallback| G[Local Control Mode]
 
----
 
-## Wokwi simulation
-
-[Wokwi Simulation](https://wokwi.com/projects/453870955625455617)
