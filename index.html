@@ -1,45 +1,132 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Smart Factory Digital Twin Dashboard</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>IoT Self-Healing Dashboard</title>
+
   <style>
-    body { font-family: Arial; background:#0b1220; color:white; padding:20px; }
-    .card { background:#111a2e; padding:15px; border-radius:12px; margin:10px 0; }
-    .ok { color:#00ff88; font-weight:bold; }
-    .fault { color:#ff4d4d; font-weight:bold; }
-    .warn { color:#ffaa00; font-weight:bold; }
-    h1 { color:#00c3ff; }
+    body {
+      font-family: Arial, sans-serif;
+      background: #0b1220;
+      color: white;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1 {
+      margin: 0 0 15px 0;
+      color: #00d4ff;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 15px;
+      margin-top: 15px;
+    }
+
+    .card {
+      background: #111a2e;
+      border: 1px solid #1f2b4a;
+      border-radius: 12px;
+      padding: 15px;
+      box-shadow: 0px 0px 15px rgba(0,0,0,0.2);
+    }
+
+    .label {
+      font-size: 13px;
+      opacity: 0.7;
+    }
+
+    .value {
+      font-size: 20px;
+      margin-top: 4px;
+      font-weight: bold;
+    }
+
+    .ok {
+      color: #00ff88;
+    }
+    .fault {
+      color: #ff4d4d;
+    }
+
+    .mode-normal {
+      color: #00ff88;
+    }
+    .mode-backup {
+      color: #ffcc00;
+    }
+    .mode-safe {
+      color: #ff4d4d;
+    }
+
+    .footer {
+      margin-top: 20px;
+      font-size: 12px;
+      opacity: 0.6;
+    }
   </style>
 </head>
+
 <body>
+  <h1>⚙️ Real-Time Multi-User IoT Self-Healing Dashboard</h1>
 
-  <h1>🏭 Smart Factory Digital Twin (Real‑Time)</h1>
+  <div class="grid">
+    <div class="card">
+      <div class="label">Primary Sensor Value</div>
+      <div class="value" id="primaryValue">--</div>
+      <div class="label">Primary Status</div>
+      <div class="value" id="primaryOK">--</div>
+    </div>
 
-  <div class="card">
-    <h2>📡 Sensor Values</h2>
-    <p>Primary Sensor: <span id="primaryValue">--</span></p>
-    <p>Backup Sensor: <span id="backupValue">--</span></p>
-    <p>Current Sensor: <span id="currentValue">--</span></p>
+    <div class="card">
+      <div class="label">Backup Sensor Value</div>
+      <div class="value" id="backupValue">--</div>
+      <div class="label">Backup Status</div>
+      <div class="value" id="backupOK">--</div>
+    </div>
+
+    <div class="card">
+      <div class="label">Load Sensor Value</div>
+      <div class="value" id="loadValue">--</div>
+      <div class="label">Overload</div>
+      <div class="value" id="overload">--</div>
+    </div>
+
+    <div class="card">
+      <div class="label">Current Value Used</div>
+      <div class="value" id="currentValue">--</div>
+      <div class="label">Active Sensor</div>
+      <div class="value" id="activeSensor">--</div>
+    </div>
+
+    <div class="card">
+      <div class="label">System Mode</div>
+      <div class="value" id="systemMode">--</div>
+      <div class="label">Fault Sensor</div>
+      <div class="value" id="faultSensor">--</div>
+    </div>
+
+    <div class="card">
+      <div class="label">Safe Mode</div>
+      <div class="value" id="safeMode">--</div>
+      <div class="label">Backup Active</div>
+      <div class="value" id="usingBackup">--</div>
+    </div>
   </div>
 
-  <div class="card">
-    <h2>✅ Sensor Status</h2>
-    <p>Primary Status: <span id="primaryOK">--</span></p>
-    <p>Backup Status: <span id="backupOK">--</span></p>
+  <div class="footer">
+    ✅ Live updates from Firebase Realtime Database
   </div>
 
-  <div class="card">
-    <h2>⚙️ System Mode</h2>
-    <p>Using Backup: <span id="usingBackup">--</span></p>
-    <p>Overload: <span id="overload">--</span></p>
-    <p>Safe Mode: <span id="safeMode">--</span></p>
-  </div>
-
+  <!-- Firebase SDK -->
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
-    // ✅ Your Firebase Config (Already Added)
+    // ✅ YOUR FIREBASE CONFIG (Already inserted)
     const firebaseConfig = {
       apiKey: "AIzaSyCh1Uw7yNa9doEzR92eZ15k5ydsb1xnY0Y",
       authDomain: "realtime-multiuser-iot-system.firebaseapp.com",
@@ -54,31 +141,68 @@
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
 
-    // Reading from: iot/status
+    // 🔥 Path where ESP32 / system data will be stored
+    // Example: iot/status/primaryValue
     const statusRef = ref(db, "iot/status");
 
-    function setStatus(id, value, type="ok") {
+    function setText(id, val) {
+      document.getElementById(id).innerText = val ?? "--";
+    }
+
+    function setBoolStatus(id, val) {
       const el = document.getElementById(id);
-      el.innerText = value;
-      el.className = type;
+      if (val === true) {
+        el.innerText = "WORKING ✅";
+        el.className = "value ok";
+      } else if (val === false) {
+        el.innerText = "FAULT ❌";
+        el.className = "value fault";
+      } else {
+        el.innerText = "--";
+        el.className = "value";
+      }
+    }
+
+    function setModeText(val) {
+      const el = document.getElementById("systemMode");
+      if (!val) {
+        el.innerText = "--";
+        el.className = "value";
+        return;
+      }
+      el.innerText = val;
+
+      if (val.includes("normal")) el.className = "value mode-normal";
+      else if (val.includes("backup")) el.className = "value mode-backup";
+      else if (val.includes("safe")) el.className = "value mode-safe";
+      else el.className = "value";
     }
 
     onValue(statusRef, (snapshot) => {
       const data = snapshot.val();
-      if (!data) return;
 
-      document.getElementById("primaryValue").innerText = data.primaryValue ?? "--";
-      document.getElementById("backupValue").innerText = data.backupValue ?? "--";
-      document.getElementById("currentValue").innerText = data.currentValue ?? "--";
+      if (!data) {
+        console.log("No data found at iot/status");
+        return;
+      }
 
-      setStatus("primaryOK", data.primaryOK ? "OK" : "FAULT", data.primaryOK ? "ok" : "fault");
-      setStatus("backupOK", data.backupOK ? "OK" : "FAULT", data.backupOK ? "ok" : "fault");
+      setText("primaryValue", data.primaryValue);
+      setText("backupValue", data.backupValue);
+      setText("loadValue", data.loadValue);
+      setText("currentValue", data.currentValue);
 
-      setStatus("usingBackup", data.usingBackup ? "YES (Backup Active)" : "NO", data.usingBackup ? "warn" : "ok");
-      setStatus("overload", data.overload ? "YES" : "NO", data.overload ? "fault" : "ok");
-      setStatus("safeMode", data.safeMode ? "ON (Shutdown)" : "OFF", data.safeMode ? "fault" : "ok");
+      setBoolStatus("primaryOK", data.primaryOK);
+      setBoolStatus("backupOK", data.backupOK);
+
+      setText("faultSensor", data.faultSensor ?? "none");
+      setText("activeSensor", data.activeSensor ?? "--");
+
+      setText("overload", data.overload ? "YES ⚠️" : "NO");
+      setText("safeMode", data.safeMode ? "ON 🔴" : "OFF");
+      setText("usingBackup", data.usingBackup ? "YES 🟡" : "NO");
+
+      setModeText(data.systemMode);
     });
   </script>
-
 </body>
 </html>
