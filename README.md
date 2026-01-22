@@ -54,3 +54,9 @@ flowchart LR
     E --> F[Web Dashboard]
 
     A -->|Fallback| G[Local Control Mode]
+
+---
+
+## Wokwi simulation
+
+[Wokwi Simulation](https://wokwi.com/projects/453870955625455617)
