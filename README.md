@@ -6,7 +6,7 @@ This project demonstrates **self‑healing automation**, **fault tolerance**, an
 
 ---
 
-## 🚀 Problem Statement
+## Problem Statement
 
 Traditional IoT systems fail silently when:
 - A sensor stops working
@@ -17,7 +17,7 @@ This leads to downtime, unsafe operation, and delayed human intervention.
 
 ---
 
-## 💡 Solution Overview
+## Solution Overview
 
 Our system introduces:
 - **Primary & Backup Sensors**
@@ -30,19 +30,19 @@ The system continues operating safely even during failures.
 
 ---
 
-## 🧠 Key Features
+## Key Features
 
-- ✅ Real‑time sensor monitoring (ESP32)
-- 🔁 Automatic switch to backup sensor
-- ⚠️ Fault & overload detection
-- 🛡️ Safe mode activation
-- 🌐 Firebase Realtime Database sync
-- 📊 Live web dashboard (Digital Twin)
-- 👥 Multi‑user real‑time access
+- Real‑time sensor monitoring (ESP32)
+- Automatic switch to backup sensor
+- Fault & overload detection
+- Safe mode activation
+- Firebase Realtime Database sync
+- Live web dashboard (Digital Twin)
+- Multi‑user real‑time access
 
 ---
 
-## 🧩 System Architecture
+## System Architecture
 
 ```mermaid
 flowchart LR
