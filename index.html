@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Smart Factory Digital Twin Dashboard</title>
+  <style>
+    body { font-family: Arial; background:#0b1220; color:white; padding:20px; }
+    .card { background:#111a2e; padding:15px; border-radius:12px; margin:10px 0; }
+    .ok { color:#00ff88; font-weight:bold; }
+    .fault { color:#ff4d4d; font-weight:bold; }
+    .warn { color:#ffaa00; font-weight:bold; }
+    h1 { color:#00c3ff; }
+  </style>
+</head>
+<body>
+
+  <h1>🏭 Smart Factory Digital Twin (Real‑Time)</h1>
+
+  <div class="card">
+    <h2>📡 Sensor Values</h2>
+    <p>Primary Sensor: <span id="primaryValue">--</span></p>
+    <p>Backup Sensor: <span id="backupValue">--</span></p>
+    <p>Current Sensor: <span id="currentValue">--</span></p>
+  </div>
+
+  <div class="card">
+    <h2>✅ Sensor Status</h2>
+    <p>Primary Status: <span id="primaryOK">--</span></p>
+    <p>Backup Status: <span id="backupOK">--</span></p>
+  </div>
+
+  <div class="card">
+    <h2>⚙️ System Mode</h2>
+    <p>Using Backup: <span id="usingBackup">--</span></p>
+    <p>Overload: <span id="overload">--</span></p>
+    <p>Safe Mode: <span id="safeMode">--</span></p>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+    // ✅ Your Firebase Config (Already Added)
+    const firebaseConfig = {
+      apiKey: "AIzaSyCh1Uw7yNa9doEzR92eZ15k5ydsb1xnY0Y",
+      authDomain: "realtime-multiuser-iot-system.firebaseapp.com",
+      databaseURL: "https://realtime-multiuser-iot-system-default-rtdb.firebaseio.com",
+      projectId: "realtime-multiuser-iot-system",
+      storageBucket: "realtime-multiuser-iot-system.firebasestorage.app",
+      messagingSenderId: "684710584510",
+      appId: "1:684710584510:web:aca9c7c6da99fefdab7eef",
+      measurementId: "G-LT2JLHG4XD"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    // Reading from: iot/status
+    const statusRef = ref(db, "iot/status");
+
+    function setStatus(id, value, type="ok") {
+      const el = document.getElementById(id);
+      el.innerText = value;
+      el.className = type;
+    }
+
+    onValue(statusRef, (snapshot) => {
+      const data = snapshot.val();
+      if (!data) return;
+
+      document.getElementById("primaryValue").innerText = data.primaryValue ?? "--";
+      document.getElementById("backupValue").innerText = data.backupValue ?? "--";
+      document.getElementById("currentValue").innerText = data.currentValue ?? "--";
+
+      setStatus("primaryOK", data.primaryOK ? "OK" : "FAULT", data.primaryOK ? "ok" : "fault");
+      setStatus("backupOK", data.backupOK ? "OK" : "FAULT", data.backupOK ? "ok" : "fault");
+
+      setStatus("usingBackup", data.usingBackup ? "YES (Backup Active)" : "NO", data.usingBackup ? "warn" : "ok");
+      setStatus("overload", data.overload ? "YES" : "NO", data.overload ? "fault" : "ok");
+      setStatus("safeMode", data.safeMode ? "ON (Shutdown)" : "OFF", data.safeMode ? "fault" : "ok");
+    });
+  </script>
+
+</body>
+</html>
