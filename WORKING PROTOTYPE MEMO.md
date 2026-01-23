@@ -1,4 +1,4 @@
-# 🔧 Working Prototype – Real‑Time Multi‑User IoT Self‑Healing System
+# Working Prototype – Real‑Time Multi‑User IoT Self‑Healing System
 
 ## 1. Overview
 This prototype demonstrates a **self‑healing IoT automation system** using an ESP32 controller that continuously monitors multiple sensors, detects faults, and automatically switches to backup or safe modes.  
@@ -8,7 +8,7 @@ All system states are synchronized in **real time** with a **Firebase Realtime D
 
 ## 2. Prototype Components
 
-### 🔌 Hardware (Simulated on Wokwi)
+### Hardware (Simulated on Wokwi)
 - ESP32 Dev Module
 - Primary Sensor (Potentiometer – Analog)
 - Backup Sensor (Potentiometer – Analog)
@@ -20,7 +20,7 @@ All system states are synchronized in **real time** with a **Firebase Realtime D
   - Blue → Network Status
 - WiFi (Simulated)
 
-### ☁️ Software & Services
+### Software & Services
 - Arduino Framework (ESP32)
 - Firebase Realtime Database
 - HTML + CSS + JavaScript Dashboard
@@ -58,5 +58,4 @@ All system states are synchronized in **real time** with a **Firebase Realtime D
 
 ---
 
-## 5. Data Flow (Live)
 
