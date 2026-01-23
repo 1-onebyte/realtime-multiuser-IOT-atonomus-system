@@ -42,10 +42,26 @@ The system continues operating safely even during failures.
   
 ---
 
-## Wokwi simulation
+## Project Structure
 
+dashboard/
+   
+   ├──([Dashboard](https://1-onebyte.github.io/realtime-multiuser-IOT-atonomus-system/))        # Live dashboard
 
-[Wokwi Simulation](https://wokwi.com/projects/453870955625455617)
+ docs/
+   
+   ├── ([architecture diagram](architecture diagram.png))
+   
+   ├── demo flow chart.png
+   
+   ├── flow diagram.png
+   
+   ├── WORKING PROTOTYPE MEMO.md
+
+ simulation/
+   
+   ├──[Wokwi Simulation](https://wokwi.com/projects/453870955625455617)
+
 
 ---
 
