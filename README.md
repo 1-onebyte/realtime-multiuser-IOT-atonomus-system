@@ -52,11 +52,11 @@ dashboard/
    
    ├── ([architecture diagram](<architecture diagram.png>))
    
-   ├── demo flow chart.png
+   ├── ([demo flow chart](<demo flow chart.png>))
    
-   ├── flow diagram.png
+   ├── ([flow diagram](<flow diagram.png>))
    
-   ├── WORKING PROTOTYPE MEMO.md
+   ├── .md([WORKING PROTOTYPE](<WORKING PROTOTYPE MEMO.png>))
 
  simulation/
    
