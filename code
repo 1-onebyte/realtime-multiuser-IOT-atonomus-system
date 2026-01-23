@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Smart Factory – Self Healing System</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #0b1220;
+      color: white;
+      padding: 20px;
+    }
+
+    h1 {
+      color: #00c3ff;
+    }
+
+    .card {
+      background: #111a2e;
+      padding: 16px;
+      border-radius: 12px;
+      margin: 14px 0;
+      box-shadow: 0 0 12px rgba(0,0,0,0.4);
+    }
+
+    .ok { color: #00ff88; font-weight: bold; }
+    .fault { color: #ff4d4d; font-weight: bold; }
+    .warn { color: #ffaa00; font-weight: bold; }
+    .info { color: #4dc3ff; font-weight: bold; }
+
+    hr {
+      border: 0;
+      height: 1px;
+      background: #222;
+      margin: 10px 0;
+    }
+  </style>
+</head>
+
+<body>
+
+<h1>🏭 Smart Factory – Digital Twin Dashboard</h1>
+
+<div class="card">
+  <h2>📡 Sensor Values</h2>
+  <p>Primary Sensor Value: <span id="primaryValue">--</span></p>
+  <p>Backup Sensor Value: <span id="backupValue">--</span></p>
+  <p>Load Sensor Value: <span id="loadValue">--</span></p>
+</div>
+
+<div class="card">
+  <h2>🚨 Sensor Health</h2>
+  <p>Primary Status: <span id="primaryStatus">--</span></p>
+  <p>Backup Status: <span id="backupStatus">--</span></p>
+  <p>Fault Sensor: <span id="faultSensor">--</span></p>
+</div>
+
+<div class="card">
+  <h2>⚙️ System State</h2>
+  <p>Active Sensor: <span id="activeSensor">--</span></p>
+  <p>System Mode: <span id="systemMode">--</span></p>
+  <p>Current Output Value: <span id="currentOutput">--</span></p>
+</div>
+
+<div class="card">
+  <h2>🛡 Safety & Network</h2>
+  <p>Overload: <span id="overload">--</span></p>
+  <p>Safe Mode: <span id="safeMode">--</span></p>
+  <p>Network Loss: <span id="networkLoss">--</span></p>
+</div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyCh1Uw7yNa9doEzR92eZ15k5ydsb1xnY0Y",
+    authDomain: "realtime-multiuser-iot-system.firebaseapp.com",
+    databaseURL: "https://realtime-multiuser-iot-system-default-rtdb.firebaseio.com",
+    projectId: "realtime-multiuser-iot-system",
+    storageBucket: "realtime-multiuser-iot-system.firebasestorage.app",
+    messagingSenderId: "684710584510",
+    appId: "1:684710584510:web:aca9c7c6da99fefdab7eef"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+  const statusRef = ref(db, "iot/status");
+
+  function setText(id, value, cls = "info") {
+    const el = document.getElementById(id);
+    el.innerText = value;
+    el.className = cls;
+  }
+
+  onValue(statusRef, (snapshot) => {
+    const d = snapshot.val();
+    if (!d) return;
+
+    setText("primaryValue", d.primaryValue);
+    setText("backupValue", d.backupValue);
+    setText("loadValue", d.loadValue);
+
+    setText("primaryStatus", d.primaryOK ? "OK ✔" : "FAULT ✖", d.primaryOK ? "ok" : "fault");
+    setText("backupStatus", d.backupOK ? "OK ✔" : "FAULT ✖", d.backupOK ? "ok" : "fault");
+
+    setText("faultSensor", d.faultSensor ?? "none", "warn");
+    setText("activeSensor", d.activeSensor ?? "--", "info");
+
+    setText("systemMode", d.systemMode ?? "--", "info");
+    setText("currentOutput", d.currentOutput ?? 0, "info");
+
+    setText("overload", d.overload ? "YES" : "NO", d.overload ? "fault" : "ok");
+    setText("safeMode", d.safeMode ? "ON 🔴" : "OFF", d.safeMode ? "fault" : "ok");
+    setText("networkLoss", d.networkLoss ? "YES 🔵" : "NO", d.networkLoss ? "warn" : "ok");
+  });
+</script>
+
+</body>
+</html>
