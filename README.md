@@ -56,7 +56,7 @@ dashboard/
    
    ├── ([flow diagram](<flow diagram.png>))
    
-   ├── .md([WORKING PROTOTYPE](<WORKING PROTOTYPE MEMO.png>))
+   ├── ([WORKING PROTOTYPE](<WORKING PROTOTYPE MEMO.md>))
 
  simulation/
    
