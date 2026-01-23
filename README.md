@@ -50,7 +50,7 @@ dashboard/
 
  docs/
    
-   ├── ([architecture diagram](architecture diagram.png))
+   ├── ([architecture diagram](<architecture diagram.png>))
    
    ├── demo flow chart.png
    
