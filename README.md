@@ -62,6 +62,25 @@ dashboard/
    
    ├──[Wokwi Simulation](https://wokwi.com/projects/453870955625455617)
 
+---
+
+## Team Contribution 
+
+| Member | Role / Responsibility | Key Contributions |
+|-------|-----------------------|------------------|
+| Member 1 | Architecture & System Design | • Designed overall system architecture  
+• Created architecture, flow, and data‑flow diagrams  
+• Defined system components and interactions |
+| Member 2 | Documentation & README | • Wrote README (problem → solution → architecture)  
+• Explained working prototype and demo flow  
+• Added diagrams and project explanation |
+| Member 3 | Presentation & Demo | • Prepared presentation slides  
+• Designed demo flow chart  
+• Explained edge cases and system behavior  
+• Aligned demo with project workflow |
+| Member 4 | Project Management & Planning | • Created JIRA‑style task structure  
+• Managed sprint planning and task tracking  
+• Maintained project structure and planning docs |
 
 ---
 
@@ -77,5 +96,4 @@ flowchart LR
     E --> F[Web Dashboard]
 
     A -->|Fallback| G[Local Control Mode]
-
 
